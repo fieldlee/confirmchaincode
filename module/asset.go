@@ -14,7 +14,7 @@ type Confirm struct {
 	Operation   string `json:"operation"` // 操作内容
 	Operator    string `json:"operator"`  // 确权信息操作人
 	Files       []File `json:"files"`
-	OperateTime uint64 `json:operateTime`
+	OperateTime int64  `json:operateTime`
 	ChainUser   string `json:"chainUser"`
 }
 
@@ -26,7 +26,7 @@ type Asset struct {
 	AssetAbstract string    `json:"assetAbstract"`
 	Operation     string    `json:"operation"`
 	Operator      string    `json:"operator"`   // 资产操作人
-	OperateTime   uint64    `json:"createTime"` // 资产创建时间
+	OperateTime   int64     `json:"createTime"` // 资产创建时间
 	ChainUser     string    `json:"chainUser"`
 	Files         []File    `json:"files"`
 	Status        string    `json:"status"`
