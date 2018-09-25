@@ -37,7 +37,13 @@ func (t *ProductTrace) Register(stub shim.ChaincodeStubInterface, args []string)
 			returnInfo.Success = false
 			returnInfo.Info = err.Error()
 		} else {
-			return services.ToRegister(stub, assetRegister)
+			chaninfo := services.ToRegister(stub, assetRegister)
+			// return response
+			jsonreturn, err := json.Marshal(chaninfo)
+			if err != nil {
+				return shim.Error("err:" + err.Error())
+			}
+			return shim.Success(jsonreturn)
 		}
 	} else {
 		log.Logger.Error("Register:参数不对，请核实参数信息。")
@@ -63,7 +69,13 @@ func (t *ProductTrace) Confirm(stub shim.ChaincodeStubInterface, args []string) 
 			returnInfo.Success = false
 			returnInfo.Info = err.Error()
 		} else {
-			return services.ToConfirm(stub, confirmParam)
+			chaninfo := services.ToConfirm(stub, confirmParam)
+			// return response
+			jsonreturn, err := json.Marshal(chaninfo)
+			if err != nil {
+				return shim.Error("err:" + err.Error())
+			}
+			return shim.Success(jsonreturn)
 		}
 	} else {
 		log.Logger.Error("Confirm:参数不对，请核实参数信息。")
