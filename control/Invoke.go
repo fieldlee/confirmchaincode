@@ -15,7 +15,7 @@ func (t *ProductTrace) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	log.Logger.Info("Invoke")
 	funcation, args := stub.GetFunctionAndParameters()
 	lowFuncation := strings.ToLower(funcation)
-	log.Logger.Info("lowFuncation", lowFuncation)
+
 	if lowFuncation == "register" { // 资产上链
 		return t.Register(stub, args)
 	}

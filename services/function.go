@@ -29,8 +29,8 @@ func ToRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (t
 	asset.AssetId = param.AssetId
 	asset.AssetName = param.AssetName
 	asset.Files = param.Files
-	asset.Operation = asset.Operation
-	asset.Operator = asset.Operator
+	asset.Operation = param.Operation
+	asset.Operator = param.Operator
 	asset.ChainUser = common.GetUserFromCertification(stub)
 	asset.OperateTime = time.Now().Unix()
 	asset.Status = common.STATUS["Init"]
@@ -53,7 +53,6 @@ func ToRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (t
 
 		return
 	}
-
 	tChan.AssetId = param.AssetId
 	tChan.Status = true
 	tChan.Error = "完成"
