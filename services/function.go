@@ -32,7 +32,7 @@ func toRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (t
 	asset.Operation = asset.Operation
 	asset.Operator = asset.Operator
 	asset.ChainUser = common.GetUserFromCertification(stub)
-	asset.CreateTime = time.Now().Unix()
+	asset.OperateTime = time.Now().Unix()
 	asset.Status = common.STATUS["Init"]
 
 	jsonByte, err := json.Marshal(asset)
