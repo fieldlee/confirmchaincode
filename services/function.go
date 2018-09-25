@@ -69,7 +69,7 @@ func toConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tCh
 		log.Logger.Error("Confirm -- get asset by assetid -- err: 未注册" + "	assetid:" + param.AssetId)
 		tChan.AssetId = param.AssetId
 		tChan.Status = false
-		tChan.Error = "改资产未注册"
+		tChan.Error = "资产未注册"
 		return
 	}
 
