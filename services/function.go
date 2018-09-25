@@ -10,7 +10,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 )
 
-func toRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (tChan module.ChanInfo) {
+func ToRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (tChan module.ChanInfo) {
 	// 	verify product if exist or not
 	jsonParam, err := stub.GetState(common.ASSET_INFO + common.ULINE + param.AssetId)
 	log.Logger.Info("------------------------------------------------------------------")
@@ -60,7 +60,7 @@ func toRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (t
 	return
 }
 
-func toConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tChan module.ChanInfo) {
+func ToConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tChan module.ChanInfo) {
 	// 	verify product if exist or not
 	jsonParam, err := stub.GetState(common.ASSET_INFO + common.ULINE + param.AssetId)
 	log.Logger.Info("------------------------------------------------------------------")

@@ -5,7 +5,6 @@ import (
 	"confirmchaincode/module"
 	"confirmchaincode/services"
 	"encoding/json"
-	// "jiakechaincode/service"
 	"strings"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -38,7 +37,7 @@ func (t *ProductTrace) Register(stub shim.ChaincodeStubInterface, args []string)
 			returnInfo.Success = false
 			returnInfo.Info = err.Error()
 		} else {
-			return services.toRegister(stub, assetRegister)
+			return services.ToRegister(stub, assetRegister)
 		}
 	} else {
 		log.Logger.Error("Register:参数不对，请核实参数信息。")
@@ -64,7 +63,7 @@ func (t *ProductTrace) Confirm(stub shim.ChaincodeStubInterface, args []string) 
 			returnInfo.Success = false
 			returnInfo.Info = err.Error()
 		} else {
-			return services.toConfirm(stub, confirmParam)
+			return services.ToConfirm(stub, confirmParam)
 		}
 	} else {
 		log.Logger.Error("Confirm:参数不对，请核实参数信息。")
