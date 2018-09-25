@@ -92,6 +92,7 @@ func ToConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tCh
 	confirm.Opinion = param.Opinion
 	confirm.OperateTime = time.Now().Unix()
 	confirm.ChainUser = common.GetUserFromCertification(stub)
+	confirm.Signature = param.Signature
 
 	asset.Status = common.STATUS["Confirming"]
 	asset.Confirm = append(asset.Confirm, confirm)

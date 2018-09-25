@@ -16,8 +16,8 @@ type ConfirmParam struct {
 	Opinion   string `json:"opinion"`
 	Operation string `json:"operation"` // 操作内容
 	Operator  string `json:"operator"`  // 确权信息操作人
-
-	Files []File `json:"files"`
+	Signature string `json:"signature"`
+	Files     []File `json:"files"`
 }
 
 // 上链信息
