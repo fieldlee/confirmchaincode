@@ -54,7 +54,7 @@ func ToRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (t
 		return
 	}
 
-	loged := TransferLog(stub, param.AssetId, param, nil)
+	loged := TransferLog(stub, param.AssetId, "资产发行", param, module.ConfirmParam{})
 
 	if loged == false {
 		log.Logger.Error("Register -- 操作日志保存错误" + "	assetid:" + param.AssetId)
@@ -122,7 +122,7 @@ func ToConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tCh
 		return
 	}
 
-	loged := TransferLog(stub, param.AssetId, nil, param)
+	loged := TransferLog(stub, param.AssetId, "资产确权", module.RegitserParam{}, param)
 
 	if loged == false {
 		log.Logger.Error("Confirm -- 操作日志保存错误" + "	assetid:" + param.AssetId)
@@ -135,12 +135,12 @@ func ToConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tCh
 }
 
 /** 记录日志 **/
-func TransferLog(stub shim.ChaincodeStubInterface, assetid string, registerparam module.RegitserParam, confimparam module.ConfirmParam) bool {
+func TransferLog(stub shim.ChaincodeStubInterface, assetid string, operate string, registerparam module.RegitserParam, confimparam module.ConfirmParam) bool {
 	curuser := common.GetUserFromCertification(stub)
 	tran := module.Transfer{}
 	tran.TxHash = stub.GetTxID()
 	tran.OperateTime = time.Now().Unix()
-	tran.Operation = operation
+	tran.Operation = operate
 	tran.Operator = curuser
 	tran.Confirm = confimparam
 	tran.Register = registerparam
