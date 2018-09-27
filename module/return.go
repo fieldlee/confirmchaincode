@@ -10,3 +10,9 @@ type ReturnInfo struct {
 	Success bool   `json:"success"`
 	Info    string `json:"info"`
 }
+
+type QueryLog struct {
+	Success bool       `json:"success"`
+	Info    string     `json:"info"`
+	Actions []Transfer `json:"actions"`
+}

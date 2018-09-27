@@ -33,3 +33,13 @@ type Asset struct {
 	Status        string    `json:"status"`
 	Confirm       []Confirm `json:"confirms"`
 }
+
+// 交易日志结构
+type Transfer struct {
+	TxHash      string        `json:"txHash"`
+	OperateTime int64         `json:"operateTime"`
+	Operation   string        `json:"operation"` // 操作内容
+	Operator    string        `json:"operator"`  // 确权信息操作人
+	Register    RegitserParam `json:"register"`
+	Confirm     ConfirmParam  `json:"confirm"`
+}

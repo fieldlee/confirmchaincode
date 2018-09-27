@@ -22,6 +22,9 @@ func (t *ProductTrace) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 	if lowFuncation == "confirm" { // 确权资产上链
 		return t.Confirm(stub, args)
 	}
+	if lowFuncation == "query" { // 确权资产上链
+		return t.QueryHistory(stub, args)
+	}
 	return shim.Error("Invalid invoke function name. " + funcation)
 }
 
@@ -79,6 +82,38 @@ func (t *ProductTrace) Confirm(stub shim.ChaincodeStubInterface, args []string) 
 		}
 	} else {
 		log.Logger.Error("Confirm:参数不对，请核实参数信息。")
+		returnInfo.Success = false
+		returnInfo.Info = "参数不对，请核实参数信息"
+	}
+	jsonreturn, err := json.Marshal(returnInfo)
+	if err != nil {
+		return shim.Error("err:" + err.Error())
+	}
+	return shim.Success(jsonreturn)
+}
+
+/** 确权资产上链 **/
+func (t *ProductTrace) QueryHistory(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+	log.Logger.Info("##############调用溯源接口开始###############")
+	returnInfo := module.ReturnInfo{}
+	if len(args) >= 1 {
+		var queryParam module.QueryParam
+		err := json.Unmarshal([]byte(args[0]), &queryParam)
+		if err != nil {
+			log.Logger.Error("QueryHistory:err" + err.Error())
+			returnInfo.Success = false
+			returnInfo.Info = err.Error()
+		} else {
+			chaninfo := services.QueryHistory(stub, queryParam)
+			// return response
+			jsonreturn, err := json.Marshal(chaninfo)
+			if err != nil {
+				return shim.Error("err:" + err.Error())
+			}
+			return shim.Success(jsonreturn)
+		}
+	} else {
+		log.Logger.Error("QueryHistory:参数不对，请核实参数信息。")
 		returnInfo.Success = false
 		returnInfo.Info = "参数不对，请核实参数信息"
 	}

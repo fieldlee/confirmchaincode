@@ -26,3 +26,7 @@ type PlatParam struct {
 	Operation string `json:"operation"` // 操作内容
 	Operator  string `json:"operator"`  // 平台上链操作人
 }
+
+type QueryParam struct {
+	AssetId string `json:"assetId"`
+}

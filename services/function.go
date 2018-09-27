@@ -53,6 +53,13 @@ func ToRegister(stub shim.ChaincodeStubInterface, param module.RegitserParam) (t
 
 		return
 	}
+
+	loged := TransferLog(stub, param.AssetId, param, nil)
+
+	if loged == false {
+		log.Logger.Error("Register -- 操作日志保存错误" + "	assetid:" + param.AssetId)
+	}
+
 	tChan.AssetId = param.AssetId
 	tChan.Status = true
 	tChan.Error = "完成"
@@ -114,8 +121,73 @@ func ToConfirm(stub shim.ChaincodeStubInterface, param module.ConfirmParam) (tCh
 		tChan.Error = err.Error()
 		return
 	}
+
+	loged := TransferLog(stub, param.AssetId, nil, param)
+
+	if loged == false {
+		log.Logger.Error("Confirm -- 操作日志保存错误" + "	assetid:" + param.AssetId)
+	}
+
 	tChan.AssetId = param.AssetId
 	tChan.Status = true
 	tChan.Error = "完成"
+	return
+}
+
+/** 记录日志 **/
+func TransferLog(stub shim.ChaincodeStubInterface, assetid string, registerparam module.RegitserParam, confimparam module.ConfirmParam) bool {
+	curuser := common.GetUserFromCertification(stub)
+	tran := module.Transfer{}
+	tran.TxHash = stub.GetTxID()
+	tran.OperateTime = time.Now().Unix()
+	tran.Operation = operation
+	tran.Operator = curuser
+	tran.Confirm = confimparam
+	tran.Register = registerparam
+
+	jsonByte, err := json.Marshal(tran)
+	if err != nil {
+		log.Logger.Error("TransferLog --err:" + err.Error())
+		return false
+	}
+	err = stub.PutState(common.ASSET_ACTION+common.ULINE+assetid, jsonByte)
+	if err != nil {
+		log.Logger.Error("TransferLog -- putState:" + err.Error())
+		return false
+	}
+	return true
+}
+
+/** 查找溯源 **/
+func QueryHistory(stub shim.ChaincodeStubInterface, param module.QueryParam) (tChan module.QueryLog) {
+	resultsIterator, err := stub.GetHistoryForKey(common.ASSET_ACTION + common.ULINE + param.AssetId)
+	if err != nil {
+		tChan.Info = err.Error()
+		tChan.Success = false
+		return
+	}
+	defer resultsIterator.Close()
+
+	results := make([]module.Transfer, 0)
+	for resultsIterator.HasNext() {
+		result, err := resultsIterator.Next()
+		if err != nil {
+			tChan.Info = err.Error()
+			tChan.Success = false
+			return
+		}
+		tran := module.Transfer{}
+		err = json.Unmarshal(result.Value, &tran)
+		if err != nil {
+			tChan.Info = err.Error()
+			tChan.Success = false
+			return
+		} else {
+			results = append(results, tran)
+		}
+	}
+	tChan.Actions = results
+	tChan.Success = true
+
 	return
 }
